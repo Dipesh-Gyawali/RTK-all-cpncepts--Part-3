@@ -5,7 +5,9 @@ import { deleteUser, showUser } from "../features/userDetailSlice";
 
 export const Read = () => {
   const dispatch = useDispatch();
-  const { users, loading, error } = useSelector((state) => state.app);
+  const { users, loading, error, searchData } = useSelector(
+    (state) => state.app
+  );
 
   useEffect(() => {
     dispatch(showUser());
@@ -18,16 +20,30 @@ export const Read = () => {
     return <h1>error error error.......</h1>;
   }
 
+  console.log(searchData, "xxxxx");
+
   const handleDelete = (id) => {
     dispatch(deleteUser(id));
   };
+
+  const searchingUser = () => {
+    const a = users.filter((item) => {
+      if (searchData.length === 0) {
+        return item;
+      } else {
+        return item.name.toLowerCase().includes(searchData.toLowerCase());
+      }
+    });
+    return a;
+  };
+  const searchedItem = searchingUser();
 
   return (
     <>
       <div>
         <h2>All data {users.length}</h2>
         {users &&
-          users.map((item) => {
+          searchedItem.map((item) => {
             return (
               <div key={item.id}>
                 <div className="card w-50 mx-auto my-2">

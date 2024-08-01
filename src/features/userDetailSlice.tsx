@@ -65,12 +65,18 @@ const initialState = {
   users: [],
   loading: false,
   error: false,
+  searchData: [],
 };
 
 export const userDetailSlice = createSlice({
   name: "CRUD API",
   initialState,
-  reducers: {},
+  reducers: {
+    search: (state, action) => {
+      // console.log(action.payload, "ppppppp");
+      state.searchData = action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -114,6 +120,6 @@ export const userDetailSlice = createSlice({
   },
 });
 
-export const {} = userDetailSlice.actions;
+export const { search } = userDetailSlice.actions;
 
 export default userDetailSlice.reducer;

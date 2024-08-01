@@ -1,4 +1,20 @@
+import { useEffect, useState } from "react";
+import { search } from "../features/userDetailSlice";
+import { useDispatch } from "react-redux";
+
 export const Navbar = () => {
+  const [searchData, setSearchData] = useState("");
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setSearchData(e.target.value);
+  };
+  console.log(searchData, "sssss");
+
+  useEffect(() => {
+    dispatch(search(searchData));
+  }, [searchData]);
+
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light bg-light"
@@ -24,6 +40,7 @@ export const Navbar = () => {
           className="form-control "
           type="search"
           placeholder="Search"
+          onChange={handleChange}
         ></input>
       </div>
     </nav>
