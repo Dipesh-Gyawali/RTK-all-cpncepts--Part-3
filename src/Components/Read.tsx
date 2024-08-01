@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { showUser } from "../features/userDetailSlice";
+import { deleteUser, showUser } from "../features/userDetailSlice";
 
 export const Read = () => {
   const dispatch = useDispatch();
@@ -10,6 +10,7 @@ export const Read = () => {
   useEffect(() => {
     dispatch(showUser());
   }, []);
+
   if (loading) {
     return <h1>LOADING.......</h1>;
   }
@@ -17,10 +18,14 @@ export const Read = () => {
     return <h1>error error error.......</h1>;
   }
 
+  const handleDelete = (id) => {
+    dispatch(deleteUser(id));
+  };
+
   return (
     <>
       <div>
-        <h2>All data</h2>
+        <h2>All data {users.length}</h2>
         {users &&
           users.map((item) => {
             return (
@@ -34,7 +39,12 @@ export const Read = () => {
                     <p className="card-text">Gender:{item.gender} </p>
                     <button className="card-link">View</button>
                     {/* <Link className="card-link">Edit</Link> */}
-                    <button className="card-link">Delete</button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="card-link"
+                    >
+                      Delete
+                    </button>
                     <hr />
                   </div>
                 </div>
