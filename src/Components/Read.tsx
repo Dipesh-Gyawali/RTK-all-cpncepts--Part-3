@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { deleteUser, showUser } from "../features/userDetailSlice";
+import CustomModal from "./CustomModal";
 
 export const Read = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState();
 
   const dispatch = useDispatch();
   const { users, loading, error, searchData } = useSelector(
@@ -56,6 +59,11 @@ export const Read = () => {
 
   const usersToDisplay = isFiltered ? filteredUsers : searchingUser();
 
+  const handleModal = (id) => {
+    setShowModal(true);
+    setId(id);
+  };
+
   return (
     <>
       <div>
@@ -87,11 +95,26 @@ export const Read = () => {
                   <div className="card-body">
                     <h5 className="card-title">Name:{item.name} </h5>
                     <h6 className="card-subtitle mb-2 text-muted">
-                      Email:{item.email}{" "}
+                      Email:{item.email}
                     </h6>
                     <p className="card-text">Gender:{item.gender} </p>
-                    <button className="card-link">View</button>
+
+                    <button
+                      onClick={() => handleModal(item.id)}
+                      className="card-link"
+                    >
+                      View
+                    </button>
+                    {showModal && (
+                      <CustomModal
+                        setShowModal={setShowModal}
+                        showModal={showModal}
+                        id={id}
+                      />
+                    )}
+
                     {/* <Link className="card-link">Edit</Link> */}
+
                     <button
                       onClick={() => handleDelete(item.id)}
                       className="card-link"
