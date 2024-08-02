@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { deleteUser, showUser } from "../features/userDetailSlice";
 
 export const Read = () => {
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [isFiltered, setIsFiltered] = useState(false);
+
   const dispatch = useDispatch();
   const { users, loading, error, searchData } = useSelector(
     (state) => state.app
@@ -20,8 +23,6 @@ export const Read = () => {
     return <h1>error error error.......</h1>;
   }
 
-  console.log(searchData, "xxxxx");
-
   const handleDelete = (id) => {
     dispatch(deleteUser(id));
   };
@@ -36,14 +37,50 @@ export const Read = () => {
     });
     return a;
   };
-  const searchedItem = searchingUser();
+  let searchedItem = searchingUser();
+
+  const handleGenderFilter = (gender) => {
+    if (gender.toLowerCase() === "male") {
+      setFilteredUsers(
+        users.filter((item) => item.gender.toLowerCase() === "male")
+      );
+    } else if (gender.toLowerCase() === "female") {
+      setFilteredUsers(
+        users.filter((item) => item.gender.toLowerCase() === "female")
+      );
+    } else {
+      setFilteredUsers(users);
+    }
+    setIsFiltered(true);
+  };
+
+  const usersToDisplay = isFiltered ? filteredUsers : searchingUser();
 
   return (
     <>
       <div>
         <h2>All data {users.length}</h2>
+        <button
+          onClick={() => handleGenderFilter("male")}
+          style={{ background: "red" }}
+        >
+          Filter : Male
+        </button>
+        <button
+          onClick={() => handleGenderFilter("female")}
+          style={{ background: "red" }}
+        >
+          Filter : Female
+        </button>
+        <button
+          onClick={() => handleGenderFilter("all")}
+          style={{ background: "red" }}
+        >
+          Filter : Reset
+        </button>
+
         {users &&
-          searchedItem.map((item) => {
+          usersToDisplay.map((item) => {
             return (
               <div key={item.id}>
                 <div className="card w-50 mx-auto my-2">
