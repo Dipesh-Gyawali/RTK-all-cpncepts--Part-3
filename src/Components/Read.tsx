@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { deleteUser, showUser } from "../features/userDetailSlice";
 import CustomModal from "./CustomModal";
 
@@ -9,6 +9,8 @@ export const Read = () => {
   const [isFiltered, setIsFiltered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState();
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const { users, loading, error, searchData } = useSelector(
@@ -30,6 +32,10 @@ export const Read = () => {
     dispatch(deleteUser(id));
   };
 
+  const handleEdit = (id) => {
+    navigate(`/edit/${id}`);
+  };
+  
   const searchingUser = () => {
     const a = users.filter((item) => {
       if (searchData.length === 0) {
@@ -120,6 +126,12 @@ export const Read = () => {
                       className="card-link"
                     >
                       Delete
+                    </button>
+                    <button
+                      onClick={() => handleEdit(item.id)}
+                      className="card-link"
+                    >
+                      Edit
                     </button>
                     <hr />
                   </div>
